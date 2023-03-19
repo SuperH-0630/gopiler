@@ -12,6 +12,7 @@ Gopiler是一款Python打包工具，基于golang。其原理是：生成python�
 7. `--xwindows` 是否启用GUI模式（默认无命令行）【bool参数】
 8. `--editbin` 在windows下，启用xwindows模式最好指定editbin.exe的位置，位于visual studio文件夹内
 9. `--pip` pip源
+10. `--ico` 可执行程序图标，windows下必须设置，同时项目文件必须配备versioninfo.json
 
 其余参数会作为python的启动参数，传给启动器。
 这些参数支持：
@@ -34,3 +35,51 @@ Gopiler是一款Python打包工具，基于golang。其原理是：生成python�
 4. *开头表示前缀匹配，例如`*ab`会忽略文件`cab`
 5. *结尾表示后缀匹配，例如`ab*`将会忽略文件`abb`
 6. *开头和结尾表示字串匹配，例如`*ab*`将会忽略文件`ab`，`cab`，`abb`
+
+## versioninfo.json
+必须设置在项目文件夹下。
+一个可行的版本是：
+```json
+{
+    "FixedFileInfo": {
+        "FileVersion": {
+            "Major": 1,
+            "Minor": 0,
+            "Patch": 0,
+            "Build": 0
+        },
+        "ProductVersion": {
+            "Major": 1,
+            "Minor": 0,
+            "Patch": 0,
+            "Build": 0
+        },
+        "FileFlagsMask": "3f",
+        "FileFlags ": "00",
+        "FileOS": "040004",
+        "FileType": "01",
+        "FileSubType": "00"
+    },
+    "StringFileInfo": {
+        "Comments": "",
+        "CompanyName": "",
+        "FileDescription": "",
+        "FileVersion": "",
+        "InternalName": "",
+        "LegalCopyright": "",
+        "LegalTrademarks": "",
+        "OriginalFilename": "",
+        "PrivateBuild": "",
+        "ProductName": "",
+        "ProductVersion": "v1.0.0.0",
+        "SpecialBuild": ""
+    },
+    "VarFileInfo": {
+        "Translation": {
+            "LangID": "0409",
+            "CharsetID": "04B0"
+        }
+    }
+}
+```
+具体的含义可参考：[learn-microsoft](https://learn.microsoft.com/zh-cn/windows/win32/menurc/versioninfo-resource?redirectedfrom=MSDN)

@@ -83,6 +83,10 @@ func main() {
 		Replacement: "?",
 	}) // 转换为合法文件名
 
+	if runtime.GOOS == "windows" && !isFile(ico) {
+		printError("You must set a icon")
+	}
+
 	if len(workPath) != 0 {
 		if !filepath.IsAbs(workPath) { // 相对路径转换为绝对路径
 			workPath, err = filepath.Abs(workPath)
