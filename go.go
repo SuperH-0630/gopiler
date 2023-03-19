@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"runtime"
 	"strings"
 )
 
@@ -25,7 +26,9 @@ func getGoVersion(goPath string) (x, y, z int) {
 }
 
 func createStartCode() (string, error) {
-	codeFormat := `package main
+	codeFormat := `//go:generate goversioninfo -icon=%s -manifest=goversioninfo.exe.manifest
+
+package main
 
 import (
 	"os"
@@ -163,9 +166,9 @@ func isFile(path string) bool {
 
 	var code string
 	if xwindows {
-		code = fmt.Sprintf(codeFormat, projectName, argsString, "true")
+		code = fmt.Sprintf(codeFormat, Base(ico), projectName, argsString, "true")
 	} else {
-		code = fmt.Sprintf(codeFormat, projectName, argsString, "false")
+		code = fmt.Sprintf(codeFormat, Base(ico), projectName, argsString, "false")
 	}
 
 	codePath := path.Join(tmpPath, fmt.Sprintf("%s_gopiler.go", projectName))
@@ -177,8 +180,20 @@ func isFile(path string) bool {
 	return codePath, nil
 }
 
-func buildGoCode(from, to string, xwindows bool) error {
+func buildGoCode(from, to string, xwindows bool) (err error) {
 	var cmd *exec.Cmd
+	if runtime.GOOS == "windows" {
+		cmd = exec.Command(goPath, "generate")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		cmd.Dir = from
+
+		err = cmd.Run()
+		if err != nil {
+			return fmt.Errorf("%e", err)
+		}
+	}
+
 	if xwindows {
 		cmd = exec.Command(goPath, "build", "-o", to, `-ldflags=-H windowsgui`, from)
 	} else {
@@ -187,7 +202,7 @@ func buildGoCode(from, to string, xwindows bool) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	err := cmd.Run()
+	err = cmd.Run()
 	if err != nil {
 		return fmt.Errorf("%e", err)
 	}

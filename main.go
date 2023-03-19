@@ -35,6 +35,7 @@ var (
 	xwindows    bool
 	editbin     string
 	pip         string
+	ico         string
 )
 
 var (
@@ -53,6 +54,7 @@ func init() {
 	flag.BoolVar(&xwindows, "xwindows", false, "As an x-windows project.")
 	flag.StringVar(&editbin, "editbin", "editbin.exe", "The editbin.exe path.")
 	flag.StringVar(&pip, "pip", "https://pypi.python.org/simple", "The pip source.")
+	flag.StringVar(&ico, "ico", "", "The ico in windows.")
 	flag.Usage = usage
 }
 
@@ -225,9 +227,14 @@ func main() {
 	target := path.Join(binPath, projectName)
 	if runtime.GOOS == "windows" {
 		target += ".exe"
+
+		err = copyVersionFile()
+		if err != nil {
+			printError("Copy version file error: %e\n", err)
+		}
 	}
 
-	err = buildGoCode(goCode, target, xwindows)
+	err = buildGoCode(tmpPath, target, xwindows)
 	if err != nil {
 		printError("Build go code error: %e\n", err)
 	}
