@@ -28,7 +28,7 @@ Gopiler是一款Python打包工具，基于golang。其原理是：生成python�
 2. windows下的隐藏文件和文件夹
 3. `.gopilerignore`忽略的文件和文件夹
 
-## .gopilerginore文件
+## .gopilerignore文件
 1. 可列出绝对路径文件和文件夹
 2. 相对于工程目录的文件和文件夹
 3. =开头表示文件名匹配
