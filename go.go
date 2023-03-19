@@ -11,8 +11,6 @@ import (
 
 func getGoVersion(goPath string) (x, y, z int) {
 	cmd := exec.Command(goPath, "version")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
 	out, err := cmd.Output()
 	if err != nil {
 		return 0, 0, 0

@@ -13,12 +13,12 @@ import (
 
 func getPythonVersion(pythonPath string) (x, y, z int) {
 	cmd := exec.Command(pythonPath, "--version")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
 	out, err := cmd.Output()
 	if err != nil {
 		return 0, 0, 0
 	}
+
+	fmt.Printf("%s\n", out)
 
 	n, err := fmt.Sscanf(string(out), "Python %d.%d.%d", &x, &y, &z)
 	if err != nil || n != 3 {
@@ -52,8 +52,6 @@ else:
 	}
 
 	cmd := exec.Command(pythonPath, testVenv)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
 	out, err := cmd.Output()
 	if err != nil {
 		return false, fmt.Errorf("%e", err)

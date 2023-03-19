@@ -243,7 +243,7 @@ func main() {
 		}
 	}
 
-	fmt.Printf("Finish!")
+	fmt.Printf("Finish!\n")
 }
 
 func usage() {
